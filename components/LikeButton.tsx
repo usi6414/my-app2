@@ -1,0 +1,20 @@
+'use client'
+import { useState, useTransition } from "react"
+import { Button } from "@/components/ui/button"
+import { likeProductAction } from "@/lib/actions"
+
+export function LikeButton({lid, initialLikes}: {lid:string, initialLikes:number}) {
+    const [likes, setLikes] = useState(initialLikes)
+    const [isPending, startTransition] = useTransition()
+
+    return (
+        <Button variant="outline" disabled={isPending} onClick={() =>
+            startTransition(async () => {
+                const newLikes = await likeProductAction(lid)
+                setLikes(newLikes)
+            })
+        }>
+            {isPending ? '저장 중...' : `좋아요 ${likes}`}
+        </Button>
+    )
+}
